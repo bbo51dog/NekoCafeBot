@@ -22,6 +22,12 @@ class CommandExecutor {
     }
 
     fun handleCommand(event: SlashCommandInteractionEvent) {
-        commands[event.name]?.handleExecute(event)
+        commands[event.name]?.let {
+            if (event.subcommandName != null) {
+                it.subCommandMap[event.subcommandName]?.handleExecute(event)
+                return
+            }
+            it.handleExecute(event)
+        }
     }
 }
