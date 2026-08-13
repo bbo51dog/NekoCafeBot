@@ -1,6 +1,9 @@
 package net.bbo51dog.nekocafebot
 
 import club.minnced.discord.jdave.interop.JDaveSessionFactory
+import net.bbo51dog.nekocafebot.command.CommandExecutor
+import net.bbo51dog.nekocafebot.command.HelpCommand
+import net.bbo51dog.nekocafebot.listener.CommandListener
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
@@ -27,14 +30,25 @@ class BotClient {
             CacheFlag.VOICE_STATE,
         )
 
+        val commandExecutor = CommandExecutor()
+
         jda = JDABuilder.createLight(token, intents)
             .enableCache(cacheFlags)
             .setRawEventsEnabled(true)
+            .addEventListeners(
+                CommandListener(commandExecutor),
+            )
             .setStatus(OnlineStatus.ONLINE)
             .setActivity(Activity.playing("ねこかふぇぼっと"))
             .setMemberCachePolicy(MemberCachePolicy.ALL)
             .setAudioModuleConfig(AudioModuleConfig().withDaveSessionFactory(JDaveSessionFactory()))
             .build()
+
+        commandExecutor.registerCommands(
+            jda,
+            HelpCommand(commandExecutor),
+        )
+
         jda.awaitReady()
     }
 }
