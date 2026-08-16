@@ -1,9 +1,12 @@
 package net.bbo51dog.nekocafebot
 
 import club.minnced.discord.jdave.interop.JDaveSessionFactory
+import net.bbo51dog.nekocafebot.audio.AudioService
 import net.bbo51dog.nekocafebot.command.CommandExecutor
 import net.bbo51dog.nekocafebot.command.HelpCommand
+import net.bbo51dog.nekocafebot.command.JoinCommand
 import net.bbo51dog.nekocafebot.listener.CommandListener
+import net.bbo51dog.nekocafebot.listener.CommonListener
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
@@ -31,11 +34,13 @@ class BotClient {
         )
 
         val commandExecutor = CommandExecutor()
+        val audioService = AudioService()
 
         jda = JDABuilder.createLight(token, intents)
             .enableCache(cacheFlags)
             .setRawEventsEnabled(true)
             .addEventListeners(
+                CommonListener(audioService),
                 CommandListener(commandExecutor),
             )
             .setStatus(OnlineStatus.ONLINE)
@@ -46,6 +51,7 @@ class BotClient {
 
         commandExecutor.registerCommands(
             jda,
+            JoinCommand(audioService),
             HelpCommand(commandExecutor),
         )
 
