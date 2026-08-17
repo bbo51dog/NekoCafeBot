@@ -4,10 +4,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN gradle shadowJar --no-daemon
+RUN gradle build --no-daemon
 
 
-FROM eclipse-temurin:25-jre-alpine
+FROM eclipse-temurin:25
 
 WORKDIR /app
 
