@@ -5,6 +5,7 @@ import net.bbo51dog.nekocafebot.audio.AudioService
 import net.bbo51dog.nekocafebot.command.CommandExecutor
 import net.bbo51dog.nekocafebot.command.HelpCommand
 import net.bbo51dog.nekocafebot.command.JoinCommand
+import net.bbo51dog.nekocafebot.command.LeaveCommand
 import net.bbo51dog.nekocafebot.listener.CommandListener
 import net.bbo51dog.nekocafebot.listener.CommonListener
 import net.dv8tion.jda.api.JDA
@@ -52,6 +53,7 @@ class BotClient {
         commandExecutor.registerCommands(
             jda,
             JoinCommand(audioService),
+            LeaveCommand(audioService),
             HelpCommand(commandExecutor),
         )
 
