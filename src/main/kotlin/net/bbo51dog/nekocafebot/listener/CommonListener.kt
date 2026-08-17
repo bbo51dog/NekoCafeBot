@@ -11,6 +11,7 @@ class CommonListener(private val audioService: AudioService) : ListenerAdapter()
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
         if (ReadingChannelList.get(event.guild.idLong) != event.channel.idLong) return
+        if (event.author.isBot) return
         if (event.guild.audioManager.isConnected) {
             audioService.speak(event.message)
         }
