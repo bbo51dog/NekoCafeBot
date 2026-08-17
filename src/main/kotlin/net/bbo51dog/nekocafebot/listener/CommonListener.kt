@@ -25,6 +25,22 @@ class CommonListener(private val audioService: AudioService) : ListenerAdapter()
         }
         if (!event.guild.audioManager.isConnected) return
         val botChannel = event.guild.audioManager.connectedChannel ?: return
+        event.channelJoined
+            ?.takeIf { it.idLong == botChannel.idLong }
+            ?.let {
+                if (!event.member.user.isBot) {
+                    audioService.speak("${event.member.effectiveName}さんが接続しました", event.guild)
+                    return
+                }
+            }
+        event.channelLeft
+            ?.takeIf { it.idLong == botChannel.idLong }
+            ?.let {
+                if (!event.member.user.isBot) {
+                    audioService.speak("${event.member.effectiveName}さんが退出しました", event.guild)
+                    return
+                }
+            }
         if (!botChannel.members.stream()
                 .anyMatch { member: Member? -> !member!!.user.isBot }) {
             event.guild.audioManager.closeAudioConnection()
