@@ -7,7 +7,7 @@ COPY . .
 RUN gradle build --no-daemon
 
 
-FROM eclipse-temurin:25
+FROM eclipse-temurin:25-jre
 
 WORKDIR /app
 
