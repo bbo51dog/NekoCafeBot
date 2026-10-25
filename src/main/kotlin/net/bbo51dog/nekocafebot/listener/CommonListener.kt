@@ -26,6 +26,10 @@ class CommonListener(private val audioService: AudioService) : ListenerAdapter()
         }
         if (!event.guild.audioManager.isConnected) return
         val botChannel = event.guild.audioManager.connectedChannel ?: return
+        if (botChannel.members.none { member: Member? -> !(member!!.user.isBot)}) {
+            event.guild.audioManager.closeAudioConnection()
+            ReadingChannelList.remove(event.guild.idLong)
+        }
         event.channelJoined
             ?.takeIf { it.idLong == botChannel.idLong }
             ?.let {
@@ -42,10 +46,5 @@ class CommonListener(private val audioService: AudioService) : ListenerAdapter()
                     return
                 }
             }
-        if (!botChannel.members.stream()
-                .anyMatch { member: Member? -> !member!!.user.isBot }) {
-            event.guild.audioManager.closeAudioConnection()
-            ReadingChannelList.remove(event.guild.idLong)
-        }
     }
 }
