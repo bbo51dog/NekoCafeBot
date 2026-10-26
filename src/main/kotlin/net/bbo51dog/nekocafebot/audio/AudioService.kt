@@ -51,7 +51,6 @@ class AudioService {
     }
 
     fun loadAndPlay(trackData: TrackData) {
-        println(trackData.file.path.toString())
         val player = getPlayer(trackData.guild)
         playerManager.loadItemOrdered(player, trackData.file.path.toString(), object : AudioLoadResultHandler {
             override fun trackLoaded(track: AudioTrack) {
