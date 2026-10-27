@@ -1,4 +1,4 @@
-package net.bbo51dog.nekocafebot.dictionary
+package net.bbo51dog.nekocafebot.dictionary.repository
 
 import net.bbo51dog.nekocafebot.database.Database
 

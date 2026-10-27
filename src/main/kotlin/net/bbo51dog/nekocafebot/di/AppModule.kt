@@ -5,12 +5,12 @@ import net.bbo51dog.nekocafebot.tts.TtsService
 import net.bbo51dog.nekocafebot.command.Command
 import net.bbo51dog.nekocafebot.command.CommandExecutor
 import net.bbo51dog.nekocafebot.command.HelpCommand
-import net.bbo51dog.nekocafebot.command.JoinCommand
-import net.bbo51dog.nekocafebot.command.LeaveCommand
-import net.bbo51dog.nekocafebot.dictionary.DictionaryRepository
+import net.bbo51dog.nekocafebot.tts.command.JoinCommand
+import net.bbo51dog.nekocafebot.tts.command.LeaveCommand
+import net.bbo51dog.nekocafebot.dictionary.repository.DictionaryRepository
 import net.bbo51dog.nekocafebot.dictionary.DictionaryService
-import net.bbo51dog.nekocafebot.dictionary.MySqlDictionaryRepository
-import net.bbo51dog.nekocafebot.listener.CommandListener
+import net.bbo51dog.nekocafebot.dictionary.repository.MySqlDictionaryRepository
+import net.bbo51dog.nekocafebot.command.CommandListener
 import net.bbo51dog.nekocafebot.listener.CommonListener
 import net.dv8tion.jda.api.hooks.EventListener
 import org.koin.dsl.bind

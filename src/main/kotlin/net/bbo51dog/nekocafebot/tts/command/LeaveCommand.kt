@@ -1,5 +1,6 @@
-package net.bbo51dog.nekocafebot.command
+package net.bbo51dog.nekocafebot.tts.command
 
+import net.bbo51dog.nekocafebot.command.Command
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
 class LeaveCommand() : Command() {

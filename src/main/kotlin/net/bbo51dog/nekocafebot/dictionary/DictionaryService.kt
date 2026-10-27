@@ -1,5 +1,7 @@
 package net.bbo51dog.nekocafebot.dictionary
 
+import net.bbo51dog.nekocafebot.dictionary.repository.DictionaryEntry
+import net.bbo51dog.nekocafebot.dictionary.repository.DictionaryRepository
 import java.util.concurrent.ConcurrentHashMap
 
 class DictionaryService(

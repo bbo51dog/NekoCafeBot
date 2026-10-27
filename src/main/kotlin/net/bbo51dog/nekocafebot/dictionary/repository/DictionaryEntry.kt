@@ -1,4 +1,4 @@
-package net.bbo51dog.nekocafebot.dictionary
+package net.bbo51dog.nekocafebot.dictionary.repository
 
 data class DictionaryEntry(
     val guildId: Long,
