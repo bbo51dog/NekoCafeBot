@@ -1,23 +1,23 @@
 package net.bbo51dog.nekocafebot
 
 import club.minnced.discord.jdave.interop.JDaveSessionFactory
-import net.bbo51dog.nekocafebot.audio.AudioService
+import net.bbo51dog.nekocafebot.command.Command
 import net.bbo51dog.nekocafebot.command.CommandExecutor
-import net.bbo51dog.nekocafebot.command.HelpCommand
-import net.bbo51dog.nekocafebot.command.JoinCommand
-import net.bbo51dog.nekocafebot.command.LeaveCommand
-import net.bbo51dog.nekocafebot.listener.CommandListener
-import net.bbo51dog.nekocafebot.listener.CommonListener
 import net.dv8tion.jda.api.JDA
 import net.dv8tion.jda.api.JDABuilder
 import net.dv8tion.jda.api.OnlineStatus
 import net.dv8tion.jda.api.audio.AudioModuleConfig
 import net.dv8tion.jda.api.entities.Activity
+import net.dv8tion.jda.api.hooks.EventListener
 import net.dv8tion.jda.api.requests.GatewayIntent
 import net.dv8tion.jda.api.utils.MemberCachePolicy
 import net.dv8tion.jda.api.utils.cache.CacheFlag
 
-class BotClient {
+class BotClient(
+    private val commandExecutor: CommandExecutor,
+    private val listeners: List<EventListener>,
+    private val commands: List<Command>,
+) {
 
     private lateinit var jda: JDA
 
@@ -34,29 +34,24 @@ class BotClient {
             CacheFlag.VOICE_STATE,
         )
 
-        val commandExecutor = CommandExecutor()
-        val audioService = AudioService()
-
         jda = JDABuilder.createLight(token, intents)
             .enableCache(cacheFlags)
             .setRawEventsEnabled(true)
-            .addEventListeners(
-                CommonListener(audioService),
-                CommandListener(commandExecutor),
-            )
+            .addEventListeners(*listeners.toTypedArray())
             .setStatus(OnlineStatus.ONLINE)
             .setActivity(Activity.playing("ねこかふぇぼっと"))
             .setMemberCachePolicy(MemberCachePolicy.ALL)
             .setAudioModuleConfig(AudioModuleConfig().withDaveSessionFactory(JDaveSessionFactory()))
             .build()
 
-        commandExecutor.registerCommands(
-            jda,
-            JoinCommand(audioService),
-            LeaveCommand(audioService),
-            HelpCommand(commandExecutor),
-        )
+        commandExecutor.registerCommands(jda, commands)
 
         jda.awaitReady()
+    }
+
+    fun shutdown() {
+        if (::jda.isInitialized) {
+            jda.shutdown()
+        }
     }
 }

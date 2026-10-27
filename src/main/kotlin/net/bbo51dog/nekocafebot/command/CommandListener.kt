@@ -1,6 +1,5 @@
-package net.bbo51dog.nekocafebot.listener
+package net.bbo51dog.nekocafebot.command
 
-import net.bbo51dog.nekocafebot.command.CommandExecutor
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
