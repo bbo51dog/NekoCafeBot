@@ -11,7 +11,13 @@ class HelpCommand(private val executor: CommandExecutor) : Command() {
     override fun handleExecute(event: SlashCommandInteractionEvent) {
         var str = "```"
         executor.commandMap.forEach { (_, command) ->
-            str += "\n${command.name} : ${command.description}"
+            if (command.subCommandMap.isEmpty()) {
+                str += "\n/${command.name} : ${command.description}"
+            } else {
+                command.subCommandMap.forEach { (_, subCommand) ->
+                    str += "\n/${command.name} ${subCommand.name} : ${subCommand.description}"
+                }
+            }
         }
         str += "```"
         event.reply(str).queue()
