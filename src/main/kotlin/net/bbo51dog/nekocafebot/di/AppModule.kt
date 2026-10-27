@@ -55,6 +55,6 @@ val appModule = module {
     } bind Command::class
 
     factory {
-        LeaveCommand(get())
+        LeaveCommand()
     } bind Command::class
 }

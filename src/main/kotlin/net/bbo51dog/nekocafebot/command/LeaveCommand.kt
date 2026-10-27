@@ -1,9 +1,8 @@
 package net.bbo51dog.nekocafebot.command
 
-import net.bbo51dog.nekocafebot.tts.TtsService
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent
 
-class LeaveCommand(private val ttsService: TtsService) : Command() {
+class LeaveCommand() : Command() {
 
     override val name: String = "leave"
     override val description: String = "vcから退出します"
