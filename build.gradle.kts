@@ -28,6 +28,8 @@ dependencies {
     implementation("io.insert-koin:koin-core:4.2.2")
     implementation("com.mysql:mysql-connector-j:9.7.0")
     implementation("com.zaxxer:HikariCP:7.1.0")
+    implementation("org.flywaydb:flyway-core:13.11.1")
+    implementation("org.flywaydb:flyway-mysql:13.11.1")
 }
 
 application {
@@ -36,7 +38,10 @@ application {
 
 tasks.shadowJar {
     archiveFileName = "bot.jar"
-    minimize()
+    mergeServiceFiles()
+    filesMatching("META-INF/services/**") {
+        duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    }
 }
 
 kotlin {

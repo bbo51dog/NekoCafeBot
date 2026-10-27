@@ -1,4 +1,4 @@
-package net.bbo51dog.nekocafebot.audio
+package net.bbo51dog.nekocafebot.tts
 
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager
@@ -6,19 +6,27 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack
-import kotlinx.coroutines.*
-import net.bbo51dog.nekocafebot.tts.MessageFormatter
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import net.bbo51dog.nekocafebot.audio.player.GuildAudioPlayer
 import net.bbo51dog.nekocafebot.audio.player.TrackData
-import net.bbo51dog.nekocafebot.tts.TtsClient
+import net.bbo51dog.nekocafebot.dictionary.DictionaryService
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Message
 import kotlin.coroutines.EmptyCoroutineContext
 
-class AudioService {
+class TtsService(
+    private val dictionaryService: DictionaryService,
+) {
 
     private val playerManager = DefaultAudioPlayerManager()
     private val players: MutableMap<String, GuildAudioPlayer> = HashMap()
+
+    companion object {
+        private const val MAX_LENGTH = 50
+    }
 
     init {
         AudioSourceManagers.registerLocalSource(playerManager)
@@ -28,7 +36,7 @@ class AudioService {
         val scope = CoroutineScope(EmptyCoroutineContext)
         scope.launch(Dispatchers.Default) {
             val deffer = async(Dispatchers.IO) {
-                TtsClient.saveVoiceToCache(MessageFormatter.format(str))
+                TtsClient.saveVoiceToCache(format(guild, str))
             }
             val trackData = TrackData(guild, deffer.await())
             loadAndPlay(trackData)
@@ -37,6 +45,16 @@ class AudioService {
 
     fun speak(message: Message) {
         speak(message.contentDisplay, message.guild)
+    }
+
+    private fun format(guild: Guild, original: String): String {
+        val urlRegex = """http(s)?://([\w-]+.)+[\w-]+(/[\w- ./?%&=]*)?""".toRegex()
+        var str = dictionaryService.replace(guild.idLong, original).replace(urlRegex, "URL省略")
+        if (str.length > MAX_LENGTH) {
+            str = str.dropLast(str.length - MAX_LENGTH)
+            str += "省略"
+        }
+        return str
     }
 
     @Synchronized

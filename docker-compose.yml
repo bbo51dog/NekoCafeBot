@@ -9,7 +9,7 @@ services:
       dockerfile: Dockerfile
     environment:
       BOT_TOKEN: ${BOT_TOKEN}
-      DB_HOST: mysql
+      DB_HOST: db
       DB_PORT: 3306
       DB_NAME: ${MYSQL_DATABASE}
       DB_USER: ${MYSQL_USER}

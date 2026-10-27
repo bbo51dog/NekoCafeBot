@@ -1,12 +1,15 @@
 package net.bbo51dog.nekocafebot.di
 
 import net.bbo51dog.nekocafebot.BotClient
-import net.bbo51dog.nekocafebot.audio.AudioService
+import net.bbo51dog.nekocafebot.tts.TtsService
 import net.bbo51dog.nekocafebot.command.Command
 import net.bbo51dog.nekocafebot.command.CommandExecutor
 import net.bbo51dog.nekocafebot.command.HelpCommand
 import net.bbo51dog.nekocafebot.command.JoinCommand
 import net.bbo51dog.nekocafebot.command.LeaveCommand
+import net.bbo51dog.nekocafebot.dictionary.DictionaryRepository
+import net.bbo51dog.nekocafebot.dictionary.DictionaryService
+import net.bbo51dog.nekocafebot.dictionary.MySqlDictionaryRepository
 import net.bbo51dog.nekocafebot.listener.CommandListener
 import net.bbo51dog.nekocafebot.listener.CommonListener
 import net.dv8tion.jda.api.hooks.EventListener
@@ -20,8 +23,16 @@ val appModule = module {
     }
 
     single {
-        AudioService()
+        TtsService(get())
     }
+
+    single {
+        DictionaryService(get())
+    }
+
+    single {
+        MySqlDictionaryRepository()
+    } bind DictionaryRepository::class
 
     factory {
         CommonListener(get())

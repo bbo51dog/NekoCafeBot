@@ -1,19 +1,19 @@
 package net.bbo51dog.nekocafebot.listener
 
-import net.bbo51dog.nekocafebot.audio.AudioService
+import net.bbo51dog.nekocafebot.tts.TtsService
 import net.bbo51dog.nekocafebot.tts.ReadingChannelList
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.events.guild.voice.GuildVoiceUpdateEvent
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
-class CommonListener(private val audioService: AudioService) : ListenerAdapter() {
+class CommonListener(private val ttsService: TtsService) : ListenerAdapter() {
 
     override fun onMessageReceived(event: MessageReceivedEvent) {
         if (ReadingChannelList.get(event.guild.idLong) != event.channel.idLong) return
         if (event.author.isBot) return
         if (event.guild.audioManager.isConnected) {
-            audioService.speak(event.message)
+            ttsService.speak(event.message)
         }
     }
 
@@ -34,7 +34,7 @@ class CommonListener(private val audioService: AudioService) : ListenerAdapter()
             ?.takeIf { it.idLong == botChannel.idLong }
             ?.let {
                 if (!event.member.user.isBot) {
-                    audioService.speak("${event.member.effectiveName}さんが接続しました", event.guild)
+                    ttsService.speak("${event.member.effectiveName}さんが接続しました", event.guild)
                     return
                 }
             }
@@ -42,7 +42,7 @@ class CommonListener(private val audioService: AudioService) : ListenerAdapter()
             ?.takeIf { it.idLong == botChannel.idLong }
             ?.let {
                 if (!event.member.user.isBot) {
-                    audioService.speak("${event.member.effectiveName}さんが退出しました", event.guild)
+                    ttsService.speak("${event.member.effectiveName}さんが退出しました", event.guild)
                     return
                 }
             }
