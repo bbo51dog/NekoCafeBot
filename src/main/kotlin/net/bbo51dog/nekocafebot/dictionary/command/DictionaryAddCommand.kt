@@ -12,7 +12,7 @@ class DictionaryAddCommand(
 ) : SubCommand() {
 
     override val name: String = "add"
-    override val description: String = "辞書に単語を追加"
+    override val description: String = "辞書に単語を追加します"
 
     init {
         addOption(CommandOption.Type.STRING, "word", "置換前の単語", true)

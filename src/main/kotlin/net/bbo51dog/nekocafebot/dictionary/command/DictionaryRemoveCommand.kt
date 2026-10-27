@@ -12,7 +12,7 @@ class DictionaryRemoveCommand(
 ) : SubCommand() {
 
     override val name: String = "remove"
-    override val description: String = "辞書から単語を削除"
+    override val description: String = "辞書から単語を削除します"
 
     init {
         addOption(CommandOption.Type.STRING, "word", "削除する単語", true)
