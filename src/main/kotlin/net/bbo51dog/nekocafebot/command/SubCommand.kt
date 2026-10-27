@@ -21,4 +21,8 @@ abstract class SubCommand {
     fun addOption(option: CommandOption) {
         options.add(option)
     }
+
+    fun addOption(type: CommandOption.Type, name: String, description: String, isRequired: Boolean = false, isAutoComplete: Boolean = false) {
+        addOption(CommandOption(type, name, description, isRequired, isAutoComplete))
+    }
 }

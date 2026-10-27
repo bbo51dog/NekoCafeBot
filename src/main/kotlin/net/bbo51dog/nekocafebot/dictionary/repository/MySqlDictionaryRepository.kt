@@ -28,7 +28,7 @@ class MySqlDictionaryRepository : DictionaryRepository {
         }
     }
 
-    override fun findAll(guildId: Long): List<DictionaryEntry> {
+    override fun findByGuild(guildId: Long): List<DictionaryEntry> {
         val sql = """
             SELECT guild_id, word, reading
             FROM tts_dictionary
@@ -39,6 +39,31 @@ class MySqlDictionaryRepository : DictionaryRepository {
             connection.prepareStatement(sql).use { statement ->
                 statement.setLong(1, guildId)
 
+                statement.executeQuery().use { result ->
+                    return buildList {
+                        while (result.next()) {
+                            add(
+                                DictionaryEntry(
+                                    guildId = result.getLong("guild_id"),
+                                    word = result.getString("word"),
+                                    reading = result.getString("reading"),
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun findAll(): List<DictionaryEntry> {
+        val sql = """
+            SELECT guild_id, word, reading
+            FROM tts_dictionary
+        """.trimIndent()
+
+        Database.connection.use { connection ->
+            connection.prepareStatement(sql).use { statement ->
                 statement.executeQuery().use { result ->
                     return buildList {
                         while (result.next()) {

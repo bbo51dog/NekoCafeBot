@@ -11,6 +11,9 @@ import net.bbo51dog.nekocafebot.dictionary.repository.DictionaryRepository
 import net.bbo51dog.nekocafebot.dictionary.DictionaryService
 import net.bbo51dog.nekocafebot.dictionary.repository.MySqlDictionaryRepository
 import net.bbo51dog.nekocafebot.command.CommandListener
+import net.bbo51dog.nekocafebot.dictionary.command.DictionaryAddCommand
+import net.bbo51dog.nekocafebot.dictionary.command.DictionaryCommand
+import net.bbo51dog.nekocafebot.dictionary.command.DictionaryRemoveCommand
 import net.bbo51dog.nekocafebot.listener.CommonListener
 import net.dv8tion.jda.api.hooks.EventListener
 import org.koin.dsl.bind
@@ -57,4 +60,16 @@ val appModule = module {
     factory {
         LeaveCommand()
     } bind Command::class
+
+    factory {
+        DictionaryCommand(get(), get())
+    } bind Command::class
+
+    factory {
+        DictionaryAddCommand(get())
+    }
+
+    factory {
+        DictionaryRemoveCommand(get())
+    }
 }

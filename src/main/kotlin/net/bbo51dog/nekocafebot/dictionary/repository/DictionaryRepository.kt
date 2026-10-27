@@ -6,7 +6,9 @@ interface DictionaryRepository : Repository {
 
     fun find(guildId: Long, word: String): DictionaryEntry?
 
-    fun findAll(guildId: Long): List<DictionaryEntry>
+    fun findByGuild(guildId: Long): List<DictionaryEntry>
+
+    fun findAll(): List<DictionaryEntry>
 
     fun save(entry: DictionaryEntry)
 

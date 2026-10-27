@@ -8,10 +8,16 @@ class DictionaryService(
     private val repository: DictionaryRepository,
 ) {
 
-    private val cache = ConcurrentHashMap<Long, Map<String, String>>()
+    private val cache = ConcurrentHashMap<Long, MutableMap<String, String>>()
+
+    init {
+        repository.findAll().forEach { entry ->
+            cache.getOrPut(entry.guildId) { mutableMapOf() }[entry.word] = entry.reading
+        }
+    }
 
     fun reload(guildId: Long) {
-        cache[guildId] = repository.findAll(guildId).associate { it.word to it.reading }
+        cache[guildId] = repository.findByGuild(guildId).associate { it.word to it.reading } as MutableMap<String, String>
     }
 
     fun add(guildId: Long, word: String, reading: String) {
